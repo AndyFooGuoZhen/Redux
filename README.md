@@ -2,7 +2,10 @@
 State management library , makes states global
 
 # Store
-Global state that's gonna be accesible. In a store , you will have multiple slices (think interface) for components. EX: CounterState is an interface that defines the types of the data that will be used in a Counter component.
+Global state that's gonna be accesible. In a store , you will have multiple slices for components.
+
+# Slice
+A slice encapsulates the state, actions, and reducer logic related to a specific feature.
 
 # Action
 What you use to interact/change the state
@@ -63,6 +66,54 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   </Provider>
 );
 ```
+
+# Building a slice and linking our reducer
+1. Define an interface
+2. Define an initial state with structure of the interface
+3. Create a slice with name, initialState and reducer
+
+```
+counterSlice.ts
+
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+interface CounterState {
+  value: number;
+}
+
+const initialState: CounterState = {
+  value: 0,
+};
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {},
+});
+
+export default counterSlice.reducer;
+```
+
+By using createSlice using redux toolkit, we get access to a reducer that we can export.
+
+4. Navigate back to store and import our reducer into the reducer field of our store
+
+```
+import counterReducer from "./counter/counterSlice";
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,  # changes here
+  },
+});
+
+```
+
+
+
+
+
+
 
 
 
