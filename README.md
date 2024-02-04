@@ -109,6 +109,31 @@ export const store = configureStore({
 
 ```
 
+# Building a reducer 
+By using createSlice, we are not mutating the state directly (even though the code snippet below it looks like it does it directly).
+
+```
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+    
+  },
+});
+
+export const { increment, decrement} = counterSlice.actions;
+```
+
+We then export our actions using counterSlice.actions.
+
+
+
 
 
 
