@@ -1,3 +1,5 @@
+Resource : https://www.youtube.com/watch?v=5yEG6GhoJBs
+
 # Redux
 State management library , makes states global
 
