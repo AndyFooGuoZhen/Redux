@@ -140,8 +140,18 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 ```
 
+# Applying middleware 
+We can add extensions or additional functionality to redux by using middleware. For this example we will be using logger as out middleware. We just need to pass in another paranmeter when creating our store.
 
-
+```
+const redux = require('redux')
+const reduxLogger = require('redux-logger');
+const createStore = redux.createStore;
+const combineReducers = redux.combineReducers;
+const applyMiddleware = redux.applyMiddleware
+const logger = reduxLogger.createLogger();
+const store = createStore(rootReducer, applyMiddleware(logger));
+```
 
 
 
