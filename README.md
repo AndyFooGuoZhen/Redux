@@ -99,6 +99,8 @@ By using createSlice using redux toolkit, we get access to a reducer that we can
 4. Navigate back to store and import our reducer into the reducer field of our store
 
 ```
+Store.ts
+
 import counterReducer from "./counter/counterSlice";
 
 export const store = configureStore({
@@ -110,9 +112,11 @@ export const store = configureStore({
 ```
 
 # Building a reducer 
-By using createSlice, we are not mutating the state directly (even though the code snippet below it looks like it does it directly).
+By using createSlice, we are not mutating the state directly (even though the code snippet below it looks like it does it directly). We can also add custom actions/payload for more customized reducer functions (look at incrementByAmount reducer).
 
 ```
+counterSlice.ts
+
 const counterSlice = createSlice({
   name: "counter",
   initialState,
@@ -123,14 +127,104 @@ const counterSlice = createSlice({
     decrement: (state) => {
       state.value -= 1;
     },
-    
+    incrementByAmount: (state, action: PayloadAction<number>) => {
+        state.value += action.payload;
+      },
   },
 });
 
-export const { increment, decrement} = counterSlice.actions;
+export const { increment, decrement, incrementByAmount} = counterSlice.actions;
 ```
 
 We then export our actions using counterSlice.actions.
+
+# Using our global state in a component
+1. import actions from our slice
+2. import rootState (type of store.getState) and Appdispatch (type of store.dispatch)
+3. import useDispatch and useSelector from react-redux
+4. We use the useSelector hook to select our global state
+5. We use dispatch to execute our reducer function
+
+```
+Counter.tsx
+
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../state/store";
+import { decrement, increment, incrementByAmount, incrementAsync } from "../state/counter/counterSlice";
+
+const Counter = () => {
+  const count = useSelector((state: RootState) => state.counter.value);
+  const dispatch = useDispatch<AppDispatch>();
+
+  return (
+    <div>
+      <h2>{count}</h2>
+      <div>
+      <button onClick={() => dispatch(increment())}>Increment by 1</button>
+        <button onClick={() => dispatch(incrementByAmount(10))}>Increment</button>
+        <button onClick={() => dispatch(decrement())}>Decrement</button>
+      </div>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+# Simulating an async action 
+createAsyncThunk is used to create an async action. The name for async functions goes with the sliceName/action convention. We then use extraReducer to include our async action and manage our async conditions (pending vs fulfilled).
+
+```
+counterSlice.ts
+
+interface CounterState {
+  value: number;
+}
+
+const initialState: CounterState = {
+  value: 0,
+};
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+    incrementByAmount: (state, action: PayloadAction<number>) => {
+      state.value += action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(incrementAsync.pending, () => {
+        console.log("incrementAsync.pending");
+      })
+      .addCase(
+        incrementAsync.fulfilled,
+        (state, action: PayloadAction<number>) => {
+          state.value += action.payload;
+        }
+      );
+  },
+});
+
+export const incrementAsync = createAsyncThunk(
+  "counter/incrementAsync",
+  async (amount: number) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return amount;
+  }
+);
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+
+export default counterSlice.reducer;
+```
 
 
 
