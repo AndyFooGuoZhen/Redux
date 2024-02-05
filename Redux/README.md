@@ -152,6 +152,10 @@ const applyMiddleware = redux.applyMiddleware
 const logger = reduxLogger.createLogger();
 const store = createStore(rootReducer, applyMiddleware(logger));
 ```
+# Redux thunk 
+Allows redux to return functions instead of objects from redux actions. Refer to asyncActions.js for more details.
+
+
 
 
 
