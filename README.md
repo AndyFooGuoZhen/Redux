@@ -4,13 +4,13 @@ Resource : https://www.youtube.com/watch?v=5yEG6GhoJBs
 State management library , makes states global
 
 # Store
-Global state that's gonna be accesible. In a store , you will have multiple slices for components.
+Global state that's gonna be accesible. In a store , you will have multiple slices for components. Holds the state.
 
 # Slice
 A slice encapsulates the state, actions, and reducer logic related to a specific feature.
 
 # Action
-What you use to interact/change the state
+What you use to interact/change the state. Describes what happened.
 
 Basic structure of an action 
 ```
@@ -23,7 +23,7 @@ Note that the payload parameter is optional. You can include the payload field s
 ```
 
 # Reducers
-Takes an action, and use the type of the action to perform updates. Reducers will never make changes to the global state directly, instead it makes a copy of the state and perform updates on the copy instead.
+Takes an action, and use the type of the action to perform updates. Reducers will never make changes to the global state directly, instead it makes a copy of the state and perform updates on the copy instead. Carries out state transition depending on the action.
 
 
 # Creating a store in store.ts
